@@ -5,11 +5,13 @@ import { money } from '../assets'
 import { CustomButton } from '../components';
 import { FormField } from '../components';
 import { checkIfImage } from '../utils'
+import { useStateContext } from '../context';
 
 export default function CreateCampaign() {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { createCampaign } = useStateContext();
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -23,8 +25,21 @@ export default function CreateCampaign() {
     setForm({ ...form, [fieldName]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    checkIfImage(form.image, async (exists) => {
+      if (exists) {
+        setIsLoading(true);
+        await createCampaign({ ...form, target: ethers.utils.parseUnits(form.target, 18) })
+        setIsLoading(false);
+        navigate('/');
+      } else {
+        alert('Provide valid image URL')
+        setForm({ ...form, image: '' });
+      }
+    })
+
 
     console.log(form);
   }
