@@ -13,6 +13,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/campaign-details/:id' element={<CompaignDetails />} />
           <Route path='/create-campaign' element={<CreateCampaign />} />
         </Routes>
 
